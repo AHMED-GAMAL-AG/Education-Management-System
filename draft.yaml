@@ -1,0 +1,35 @@
+models:
+
+  Subject:
+    name: string
+    code: string
+    relationships:
+      belongsToMany: Category
+
+  Category:
+    name: string
+    slug: string
+    parent_id: unsignedBigInteger, nullable
+    relationships:
+      belongsTo: Category
+      hasMany: Category
+      belongsToMany: Subject
+
+  Course:
+    name: string
+    code: string
+    subject_id: unsignedBigInteger
+    relationships:
+      belongsTo: Subject
+
+  Diploma:
+    name: string
+    code: string
+    relationships:
+      belongsToMany: Subject
+
+  StudyPlan:
+    name: string
+    code: string
+    relationships:
+      belongsToMany: Course, Diploma
