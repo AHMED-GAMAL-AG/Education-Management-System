@@ -20,8 +20,8 @@ class Course extends Model
         'name',
         'code',
         'duration',
-        'status',
         'subject_id',
+        'image',
     ];
 
     /**

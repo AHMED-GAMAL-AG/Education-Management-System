@@ -14,6 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('diploma_subject', function (Blueprint $table) {
+            $table->string('price');
             $table->foreignIdFor(Diploma::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Subject::class)->constrained()->cascadeOnDelete();
         });

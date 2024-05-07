@@ -2,9 +2,10 @@
 
 namespace App\Enums;
 
+use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 
-enum DiplomaStatus: string implements HasIcon
+enum DiplomaStatus: string implements HasIcon, HasColor
 {
     case Draft = 'draft';
     case Reviewing = 'reviewing';
@@ -23,6 +24,16 @@ enum DiplomaStatus: string implements HasIcon
             self::Reviewing => 'heroicon-m-eye',
             self::Published => 'heroicon-m-check',
             self::Rejected => 'heroicon-m-x-mark',
+        };
+    }
+
+    public function getColor(): string | array | null
+    {
+        return match ($this) {
+            self::Draft => 'info',
+            self::Reviewing => 'warning',
+            self::Published => 'success',
+            self::Rejected => 'danger',
         };
     }
 }

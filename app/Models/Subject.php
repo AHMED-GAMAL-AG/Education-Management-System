@@ -21,6 +21,10 @@ class Subject extends Model
         'description',
         'image',
         'status',
+        'is_visible',
+        'code',
+        'category_id',
+        'published_at'
     ];
 
     /**

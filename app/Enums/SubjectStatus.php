@@ -20,4 +20,19 @@ enum SubjectStatus: string implements HasLabel
     {
         return $this->name;
     }
+
+    /**
+     * Get the color associated with the course status.
+     *
+     * @return string|array|null The color associated with the course status.
+     */
+    public function getColor(): string | array | null
+    {
+        return match ($this) {
+            self::Draft => 'gray',
+            self::Reviewing => 'warning',
+            self::Published => 'success',
+            self::Rejected => 'danger',
+        };
+    }
 }

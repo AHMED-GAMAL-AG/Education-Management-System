@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('description');
             $table->string('image');
             $table->string('status');
+            $table->boolean('is_visible');
+            $table->string('published_at');
             $table->string('code')->unique();
 
             $table->foreignIdFor(Category::class)->nullable()->cascadeOnDelete();
