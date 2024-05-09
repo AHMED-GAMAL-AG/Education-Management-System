@@ -20,7 +20,6 @@ class StudyPlan extends Model
         'name',
         'code',
         'duration',
-        'status',
     ];
 
     /**

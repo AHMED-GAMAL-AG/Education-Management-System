@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('duration');
-            $table->string('image');
-
 
             $table->foreignIdFor(Subject::class)->nullable()->cascadeOnDelete();
             $table->timestamps();

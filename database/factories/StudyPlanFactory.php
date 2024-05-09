@@ -22,7 +22,8 @@ class StudyPlanFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'code' => $this->faker->word(),
+            'code' => 'SP-' . Str::random(5),
+            'description' => $this->faker->sentence(),
         ];
     }
 }

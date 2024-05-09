@@ -35,4 +35,19 @@ enum SubjectStatus: string implements HasLabel
             self::Rejected => 'danger',
         };
     }
+
+    /**
+     * Get a random value from the SubjectStatus enum.
+     *
+     * @return string The randomly selected SubjectStatus value.
+     */
+    public static function getRandomValue(): SubjectStatus
+    {
+        return match (rand(0, 3)) {
+            0 => self::Draft,
+            1 => self::Reviewing,
+            2 => self::Published,
+            default => self::Rejected,
+        };
+    }
 }

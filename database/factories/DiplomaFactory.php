@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\DiplomaStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Diploma;
@@ -22,7 +23,9 @@ class DiplomaFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'code' => $this->faker->word(),
+            'code' => 'DP-' . Str::random(5),
+            'description' => $this->faker->sentence(),
+            'status' => DiplomaStatus::getRandomValue(),
         ];
     }
 }

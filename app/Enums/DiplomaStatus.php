@@ -27,6 +27,11 @@ enum DiplomaStatus: string implements HasIcon, HasColor
         };
     }
 
+    /**
+     * Get the color associated with the diploma status.
+     *
+     * @return string|array|null The color associated with the diploma status.
+     */
     public function getColor(): string | array | null
     {
         return match ($this) {
@@ -34,6 +39,21 @@ enum DiplomaStatus: string implements HasIcon, HasColor
             self::Reviewing => 'warning',
             self::Published => 'success',
             self::Rejected => 'danger',
+        };
+    }
+
+    /**
+     * Get a random value from the DiplomaStatus enum.
+     *
+     * @return string The randomly selected DiplomaStatus value.
+     */
+    public static function getRandomValue(): DiplomaStatus
+    {
+        return match (rand(0, 3)) {
+            0 => self::Draft,
+            1 => self::Reviewing,
+            2 => self::Published,
+            default => self::Rejected,
         };
     }
 }

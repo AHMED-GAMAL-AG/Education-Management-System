@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Course;
 use App\Models\Subject;
+use Database\Seeders\LocalImages;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class CourseFactory extends Factory
 {
@@ -23,8 +25,22 @@ class CourseFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'code' => $this->faker->word(),
-            'subject_id' => Subject::factory(),
+            'code' => 'CR-' . Str::random(5),
+            'duration' => $this->faker->time(),
         ];
+    }
+
+    public function configure(): CourseFactory
+    {
+        return $this->afterCreating(function (Course $product) {
+            try {
+                $product
+                    ->addMedia(LocalImages::getRandomFile())
+                    ->preservingOriginal()
+                    ->toMediaCollection('course-images');
+            } catch (UnreachableUrl $exception) {
+                return;
+            }
+        });
     }
 }

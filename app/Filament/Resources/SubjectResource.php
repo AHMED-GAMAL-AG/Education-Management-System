@@ -43,7 +43,7 @@ class SubjectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Blog';
+    protected static ?string $navigationGroup = 'School';
 
     protected static ?int $navigationSort = 3;
 
