@@ -15,8 +15,15 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -45,11 +52,11 @@ class DiplomaResource extends Resource
                             ->schema(static::getDetailsFormSchema())
                             ->columns(2),
 
-                        Forms\Components\Section::make('Diploma items')
+                        Forms\Components\Section::make('Diploma subjects')
                             ->headerActions([
                                 Action::make('reset')
                                     ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the diploma.')
+                                    ->modalDescription('All existing subjects will be removed from the diploma.')
                                     ->requiresConfirmation()
                                     ->color('danger')
                                     ->action(fn (Forms\Set $set) => $set('items', [])),
@@ -80,13 +87,45 @@ class DiplomaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('code')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('status')
+                    ->sortable(),
+
+                TextColumn::make('subjects_count')
+                    ->counts('subjects')
+                    ->formatStateUsing(fn ($state) => $state <= 1 ? $state . ' ' . __('subject') : $state . ' ' . __('subjects')),
+
+                TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
+                    ->sortable()
+                    ->date(),
+
+                TextColumn::make('updated_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
+                    ->sortable()
+                    ->date(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options(DiplomaStatus::class)
+                    ->searchable()
+                    ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make()
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -140,16 +179,17 @@ class DiplomaResource extends Resource
 
     public static function getItemsRepeater(): Repeater
     {
-        return Repeater::make('subjects')
+        return Repeater::make('diplomaSubjects')
             ->relationship()
             ->schema([
                 Forms\Components\Select::make('subject_id')
+                    ->relationship('subject', 'name')
+                    ->preload()
                     ->live()
                     ->label('Subject')
-                    ->options(Subject::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('code', Subject::find($state)?->code ?? 0))
+                    ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('code', Subject::find($state)?->code ?? ''))
                     ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan([
@@ -169,8 +209,6 @@ class DiplomaResource extends Resource
                 Forms\Components\TextInput::make('code')
                     ->label('Code')
                     ->disabled()
-                    ->dehydrated()
-                    ->required()
                     ->columnSpan([
                         'md' => 3,
                     ]),

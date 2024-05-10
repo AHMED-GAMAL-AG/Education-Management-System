@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('price');
             $table->foreignIdFor(Diploma::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Subject::class)->constrained()->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

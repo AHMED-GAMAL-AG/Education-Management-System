@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
@@ -23,6 +24,11 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -77,8 +83,10 @@ class CourseResource extends Resource
 
                 Section::make('Image')
                     ->schema([
-                        FileUpload::make('image')
-                            ->image()
+                        SpatieMediaLibraryFileUpload::make('image')
+                            ->imageEditor()
+                            ->downloadable()
+                            ->collection('course-images')
                             ->hiddenLabel(),
                     ])
                     ->collapsible(),
@@ -89,13 +97,44 @@ class CourseResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('code')
+                    ->copyable()
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('subject.name')
+                    ->label('Subject')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('duration')
+                    ->time('H:i')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
+                    ->sortable()
+                    ->date(),
+
+                TextColumn::make('updated_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
+                    ->sortable()
+                    ->date(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make()
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

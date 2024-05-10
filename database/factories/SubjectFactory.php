@@ -26,7 +26,7 @@ class SubjectFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'code' => 'SUB' . Str::random(5),
+            'code' => 'SUB-' . Str::random(5),
             'status' => SubjectStatus::getRandomValue(),
             'is_visible' => $this->faker->boolean(),
             'published_at' => $this->faker->date(),

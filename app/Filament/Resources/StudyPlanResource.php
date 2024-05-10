@@ -25,7 +25,7 @@ class StudyPlanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
 
-    protected static ?string $slug = 'subjects';
+    protected static ?string $slug = 'study-plans';
 
     protected static ?string $recordTitleAttribute = 'name';
 

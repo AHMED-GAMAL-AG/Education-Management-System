@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('diploma_study_plan', function (Blueprint $table) {
             $table->foreignIdFor(Diploma::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(StudyPlan::class)->constrained()->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 

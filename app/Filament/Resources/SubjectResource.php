@@ -139,7 +139,6 @@ class SubjectResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('status')
-                    ->label('Status')
                     ->badge()
                     ->searchable()
                     ->sortable(),

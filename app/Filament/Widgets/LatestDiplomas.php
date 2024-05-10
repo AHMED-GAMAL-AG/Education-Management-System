@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\DiplomaResource;
 use App\Models\Diploma;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
@@ -21,29 +22,32 @@ class LatestDiplomas extends BaseWidget
             ->defaultPaginationPageOption(5)
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Order Date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('number')
+                TextColumn::make('code')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer.name')
+
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge(),
-                // Tables\Columns\TextColumn::make('currency')
-                //     ->getStateUsing(fn ($record): ?string => Currency::find($record->currency)?->name ?? null)
-                //     ->searchable()
-                //     ->sortable(),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->searchable()
+
+                TextColumn::make('status')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('shipping_price')
-                    ->label('Shipping cost')
+
+                TextColumn::make('subjects_count')
+                    ->counts('subjects')
+                    ->formatStateUsing(fn ($state) => $state <= 1 ? $state . ' ' . __('subject') : $state . ' ' . __('subjects')),
+
+                TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->date(),
+
+                TextColumn::make('updated_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable()
+                    ->sortable()
+                    ->date(),
             ])
             ->actions([
                 Tables\Actions\Action::make('open')
